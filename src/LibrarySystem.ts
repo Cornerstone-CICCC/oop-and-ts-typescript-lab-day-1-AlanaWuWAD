@@ -9,33 +9,79 @@
 
 enum BookGenre {
   Fantasy,
-  // add 4 more
+  Romance,
+  ScienceFiction, 
+  Paranormal, 
+  Mystery,
+  Horror, 
 }
 
 type Book = {
-
+  bookId :number, 
+  title :string, 
+  author :string, 
+  genre :BookGenre, 
+  isAvailable :boolean
 }
 
 const library: Book[] = [];
 
-function addBook(bookId, title, author, genre) {
-
+function addBook(bookId:number, title:string, author:string, genre:BookGenre) : Book[]{
+  library.push({
+    bookId,
+    title,
+    author,
+    genre,
+    isAvailable: true
+  })
+  return library
 }
 
-function borrowBook(bookId) {
-
+function borrowBook(bookId:number): string {
+  let bookTitle : string = ``
+  library.forEach(book =>{
+  if(book.bookId === bookId){
+    bookTitle = book.title
+    book.isAvailable = false
+  }
+ })
+ return ` "${bookTitle}" has been borrowed`
 }
 
-function returnBook(bookId) {
-
+function returnBook(bookId: number): string {
+  let returnResult: string = ``
+  library.forEach(book =>{
+  if(book.bookId === bookId){
+    book.isAvailable = false
+    if(book.isAvailable = true) {
+      returnResult=`"${book.title}" has been returned.`
+    }else{
+       returnResult=`"${book.title}" has not been returned.`
+    }
+  }
+ })
+ return returnResult
 }
 
-function checkAvailability(bookId) {
-
+function checkAvailability(bookId: number): boolean {
+  let check: boolean = false
+  library.forEach(book =>{
+    if(book.bookId === bookId){
+      check = book.isAvailable 
+    }
+  })
+  return check
 }
 
-function removeBook(bookId) {
-
+function removeBook(bookId:number): string {
+  let bookRemove:string = ``
+  library.forEach((book,i) => {
+    if(book.bookId === bookId){
+      library.splice(i,1)
+      bookRemove = `"${book.title} has been removed from the library"`
+    }
+  })
+  return bookRemove
 }
 
 // Test cases (Create more if needed)

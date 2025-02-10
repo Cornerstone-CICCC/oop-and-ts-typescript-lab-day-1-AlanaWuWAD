@@ -28,28 +28,98 @@ type BankAccount = {
 
 const accounts: BankAccount[] = [];
 
-function createAccount(accountNo, firstname, lastname, initialDeposit, isActive = true) {
+function createAccount(accountNo: number, firstname: string, lastname: string, initialDeposit: number, isActive = true) {
+  accounts.push({
+    accountNo,
+    firstname,
+    lastname,
+    balance: initialDeposit,
+    isActive,
+    transactions: []
+  })
+  return accounts
+}
+
+function processTransaction(accountNo: number, amount: number, transactionType: TransactionType) {
+  let trans = ''
+  let insufficient = 0
+  accounts.forEach(account => {
+    if (account.accountNo === accountNo) {
+      if (transactionType === TransactionType.Deposit) {
+        insufficient = 1
+        trans = TransactionType[0].toLocaleLowerCase()
+        account.balance += amount
+
+        account.transactions.push({
+          accountNo: account.accountNo, 
+          amount: amount, 
+          type: TransactionType[TransactionType.Deposit]        
+        })
+
+      } else if (transactionType === TransactionType.Withdraw) {
+        if (account.balance < amount) {
+          insufficient = 0
+          trans = "Insufficient funds for withdrawal"
+          
+        }else{
+          insufficient = 1
+          trans = TransactionType[1].toLocaleLowerCase()
+          account.balance -= amount
+
+          account.transactions.push({
+            accountNo: account.accountNo, 
+            amount: amount, 
+            type: TransactionType[TransactionType.Withdraw]
+          })
+        }
+      }
+    }
+    
+  })
+  return insufficient === 0 ? `${trans}` : `${amount} ${trans} into account ${accountNo}`
 
 }
 
-function processTransaction(accountNo, amount, transactionType) {
-
+function getBalance(accountNo: number) {
+  let balance = 0
+  accounts.forEach(account => {
+    if(account.accountNo === accountNo){
+      balance= account.balance
+    } 
+  })
+  return balance
 }
 
-function getBalance(accountNo) {
-
+function getTransactionHistory(accountNo: number) {
+  let arr
+  accounts.forEach(account =>{
+    if (account.accountNo === accountNo){
+      arr = account.transactions
+    }
+  })
+  return arr
 }
 
-function getTransactionHistory(accountNo) {
-
+function checkActiveStatus(accountNo: number) {
+  let check
+  accounts.forEach(account =>{
+    if(account.accountNo === accountNo){
+      check = account.isActive
+    }
+  })
+  return check
 }
 
-function checkActiveStatus(accountNo) {
+function closeAccount(accountNo: number) {
+  const index = accounts.findIndex(account => account.accountNo === accountNo)
 
-}
+  let alert =  `Account No: ${accounts[index].accountNo} is removed`
+  
+  if(index != -1){
+    accounts.splice(index,1)
+  } 
 
-function closeAccount(accountNo) {
-
+  return alert
 }
 
 // Test cases (students should add more)

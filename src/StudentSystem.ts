@@ -9,25 +9,56 @@
 type StudentStatus = "active" | "graduated" | "dropped";
 
 type Student = {
-
+    studentId :number, 
+    name :string, 
+    age :number, 
+    subjects :string[], 
+    status :StudentStatus
 }
 
 const students: Student[] = [];
 
-function addStudent(studentId, name, age, subjects, status) {
-
+function addStudent(studentId:number, name:string, age:number, subjects:string[], status:StudentStatus):Student[]{
+    students.push({
+        studentId,
+        name,
+        age,
+        subjects,
+        status
+    })
+    return students
 }
 
-function updateStatus(studentId, status) {
-
+function updateStatus(studentId:number, status:StudentStatus): string {
+    let statusCheck: string = `` 
+    students.forEach(student => {
+        if(student.studentId === studentId){
+            student.status = status
+            statusCheck = `${student.name} has ${student.status}`
+        }
+    })
+    return statusCheck
 }
 
-function addSubject(studentId, subject) {
-
+function addSubject(studentId:number, subject:string): string {
+    let subjectadded: string = `` 
+    students.forEach(student => {
+        if(student.studentId === studentId){
+            student.subjects.push(subject)
+            subjectadded = `"${subject}" added to ${student.name}'s subjects`
+        }
+    })
+    return subjectadded
 }
 
-function getStudent(studentId) {
-
+function getStudent(studentId:number):Student {
+    let studentInfo
+    students.forEach(student => {
+        if(student.studentId === studentId){
+            studentInfo = student
+        }
+    })
+    return studentInfo
 }
 
 // Test cases (Create more if needed)

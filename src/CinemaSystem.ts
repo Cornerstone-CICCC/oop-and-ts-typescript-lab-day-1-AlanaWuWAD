@@ -8,27 +8,59 @@
 
 enum MovieGenre {
   Action,
-  // add 4 more
+  Comedy,
+  Drama, 
+  Adventure,
+  Horror
 }
 
-type Seat = [string, number]
+type Seat = [rowLetter:string, seatNumber:number]
 
 type Movie = {
-
+  movieId : number, 
+  title : string, 
+  genre : MovieGenre, 
+  availableSeats :Seat[]
 }
 
 const movies: Movie[] = [];
 
-function addMovie(movieId, title, genre, availableSeats) {
+function addMovie(movieId: number, title: string, genre: MovieGenre, availableSeats: Seat[]): Movie{
+  const newMovie = {movieId, title, genre,availableSeats}
+  
+  movies.push(newMovie)
 
+  return newMovie
 }
 
-function bookSeat(movieId, rowLetter, seatNumber) {
+function bookSeat(movieId: number, rowLetter: string, seatNumber: number): string {
+  const bookedSeat: Seat = [rowLetter,seatNumber]
 
+  movies.forEach(movie =>{
+    if(movie.movieId === movieId){
+      movie.availableSeats = [bookedSeat]
+    }
+  })
+
+  return `Seat ${bookedSeat[0]}${bookedSeat[1]} booked`
 }
 
-function checkSeatAvailability(movieId, rowLetter, seatNumber) {
-
+function checkSeatAvailability(movieId: number, rowLetter: string, seatNumber: number): boolean {
+  let seatCheck: boolean = false;
+  const bookedSeat: Seat = [rowLetter,seatNumber]
+  movies.forEach(movie =>{
+    if(movie.movieId === movieId){
+      movie.availableSeats.forEach(seat =>{
+        // console.log('if', seat.join(''), bookedSeat.join('') , (seat.join(``) === bookedSeat.join('')))
+        if(seat.join() === bookedSeat.join()){
+          seatCheck = false
+        }else {
+          seatCheck = true
+        }
+      })
+    }
+  })
+  return seatCheck
 }
 
 // Test cases (Create more if needed)

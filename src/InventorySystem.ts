@@ -8,21 +8,40 @@
 type ItemDetails = [string, number, boolean]
 
 type InventoryItem = {
-
+    itemId : number, 
+    details : ItemDetails
 }
 
 const inventory: InventoryItem[] = [];
 
-function addItem(itemId, itemName, quantity, isAvailable) {
-
+function addItem(itemId: number, itemName: string, quantity: number, isAvailable: boolean): InventoryItem[] {
+    inventory.push({
+        itemId,
+        details: [itemName, quantity, isAvailable]
+    })
+    return inventory
 }
 
-function updateStock(itemId, quantity) {
-
+function updateStock(itemId:number, quantity:number):string {
+    let updateItem = ``
+    inventory.forEach(item =>{
+        console.log('foreach', item)
+        if(item.itemId === itemId){
+            item.details[1] = quantity
+            updateItem = `Stock updated for ${item.details[0]}, new quantity: ${item.details[1]}`
+        }
+    })
+    return updateItem
 }
 
-function checkStock(itemId) {
-
+function checkStock(itemId: number): boolean {
+    let checkResult: boolean = false
+    inventory.forEach(item => {
+        if(item.itemId === itemId){
+            item.details[1] > 0? checkResult=true : checkResult=false
+        }
+    })
+    return checkResult
 }
 
 // Test cases (Create more if needed)
